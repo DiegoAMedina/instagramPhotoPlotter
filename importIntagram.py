@@ -58,15 +58,13 @@ longitudeLocation = float(longitudeString)
 print "Longitude: ", longitudeLocation
 
 
+
+
+
 #----------------------------display location on web browser
 
 
 import webbrowser
-
-
-# html file 
-f = open('pinDrop')
-
 
 # location of html file
 filename = '/home/diegomedina/SchoolWork/CSUMB - Multimedia/instagramAPI/' + 'pinDrop.html'
