@@ -3,14 +3,52 @@
 # prints all the information of the user including the latitude and location.
 # need to change the information into a csv file to retrieve the latitude and location.
 
+# libraries for user information retrieval and api usage
 from lxml import etree
 import urllib
+import webbrowser, os.path
+
+# gui library
+import easygui
+
+#----------------------------------------------------------GUI-------------------------------------------------------------------
+
+photo = "/home/diegomedina/SchoolWork/CSUMB - Multimedia/instagramAPI/InstaPlot/titleImage.gif"
+
+userName = easygui.enterbox(image = photo, msg='Enter instagram user display name', title='InstaPlot', default='', strip=True)
 
 
-#--------------------------------------------------retrieving user information---------------------------------------------------
+#--------------------------------------retrieve user information (user id number)-------------------------------------------------
 
-# user information to look up.
-userId = "186357295"
+
+userIdUrl= "https://api.instagram.com/v1/users/search?q=&access_token=186357295.1677ed0.6ce9f99b45fc4ecfb460fd12acc0653f"
+#webbrowser.open(userId)
+    
+userNameIndex = userIdUrl.find("q=") + 2
+userIdUrl = userIdUrl[:userNameIndex] + userName + userIdUrl[userNameIndex:]          
+      
+# webPage variable will hold the information from the url.
+webPage = urllib.urlopen(userIdUrl)
+
+# pageinfo will hold all the data displayed on the screen with the user id
+pageInfo = webPage.read() 
+
+userNameIndex = pageInfo.find(userName)
+
+userNameIndex = pageInfo.find("id", userNameIndex) + 6
+
+userId = ""
+
+while (pageInfo[userNameIndex] != '"'):
+	
+	userId += pageInfo[userNameIndex]
+	userNameIndex = userNameIndex + 1 
+
+
+
+#---------------------------------------retrieving user information (Coordinates)-------------------------------------------------
+
+
 
 # instagram api url to retrieve user picture information.
 url = "https://api.instagram.com/v1/users//media/recent/?access_token=186357295.1677ed0.6ce9f99b45fc4ecfb460fd12acc0653f&count=33"
@@ -251,7 +289,7 @@ contents = '''
 
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 4,
-      center: new google.maps.LatLng(38.94,-98.977),
+      center: new google.maps.LatLng(38.94,-95.977),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
@@ -310,8 +348,8 @@ def browseLocal(webpageText, filename='InstaPlot.html'):
     strToFile(webpageText, filename)
     webbrowser.open("file:///" + os.path.abspath(filename)) #elaborated for Mac
 
-main()
 
+main()
 
 
 # (next comment for debugging)
