@@ -304,6 +304,7 @@ contents = '''
       });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        marker.setIcon('iconImage.png');
         return function() {
           infowindow.setContent(locations[i][0]);
           infowindow.open(map, marker);
