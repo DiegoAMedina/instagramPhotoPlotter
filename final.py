@@ -15,7 +15,7 @@ import easygui
 
 photo = "/home/diegomedina/SchoolWork/CSUMB - Multimedia/instagramAPI/InstaPlot/titleImage.gif"
 
-userName = easygui.enterbox(image = photo, msg='Enter instagram user display name', title='InstaPlot', default='', strip=True)
+userName = easygui.enterbox( msg='Enter instagram user display name',image = photo, title='InstaPlot', default='', strip=True)
 
 
 #--------------------------------------retrieve user information (user id number)-------------------------------------------------
@@ -33,12 +33,15 @@ webPage = urllib.urlopen(userIdUrl)
 # pageinfo will hold all the data displayed on the screen with the user id
 pageInfo = webPage.read() 
 
+print("Retrieving user's Instagram information...")
+
 userNameIndex = pageInfo.find(userName)
 
 userNameIndex = pageInfo.find("id", userNameIndex) + 6
 
 userId = ""
 
+print ("Searching for user's instagram ID...")
 while (pageInfo[userNameIndex] != '"'):
 	
 	userId += pageInfo[userNameIndex]
@@ -49,15 +52,13 @@ while (pageInfo[userNameIndex] != '"'):
 #---------------------------------------retrieving user information (Coordinates)-------------------------------------------------
 
 
-
+print("Searching for coordinates..")
 # instagram api url to retrieve user picture information.
 url = "https://api.instagram.com/v1/users//media/recent/?access_token=186357295.1677ed0.6ce9f99b45fc4ecfb460fd12acc0653f&count=33"
 
 # insterts user id in url.
 userIdIndex = url.find("users/") + 6
 instagramUserURL = url[:userIdIndex] + userId + url[userIdIndex:]
-
-
 
 # webPage variable will hold the information from the url.
 webPage = urllib.urlopen(instagramUserURL)
@@ -89,7 +90,7 @@ while(pageInfo[maxIdIndex] != '"'):
 
 
 #--------------------------------------------------------Finds coordinates (LOOP)-------------------------------------------------
-
+coordinatesCount = 1
 quitLoop = 0
 #while (pageInfo.find("max_id=") > 0):
 while (quitLoop == 0):
@@ -99,7 +100,10 @@ while (quitLoop == 0):
 		# loops through all the data until all the coordinates are found
 		# " > 0 " so it does not become an infinite loop 
 		while (pageInfo.find("latitude", counter) > 0 ):
-
+			
+			print ("Collecting coordinates:") 
+			print (coordinatesCount)
+			coordinatesCount = coordinatesCount + 1
 
 			#-------------------------------------------------------finds latitude
 
@@ -123,7 +127,26 @@ while (quitLoop == 0):
 			latitudeString += ","
 	
 			coordinatesString += latitudeString
+		
+			# -----------------------------------------------------find location name
+			
+			# find location name index
+			locationNameIndex = pageInfo.find("name", counter)
+			locationNameIndex = locationNameIndex + 8
+			
+			locationNameString = "'"
+			
+			while(pageInfo[locationNameIndex] != '"'):
+				locationNameString += pageInfo[locationNameIndex]
+				locationNameIndex = locationNameIndex + 1	
 	
+			locationNameString += "',"
+	
+			coordinatesString += locationNameString
+	
+	
+			print locationNameString
+			print ('\n')
 	
 			#-------------------------------------------------------finds longitude
 
@@ -177,6 +200,10 @@ while (quitLoop == 0):
 		while (pageInfo.find("latitude", counter) > 0 ):
 
 
+			print ("Collecting coordinates:") 
+			print (coordinatesCount)
+			coordinatesCount = coordinatesCount + 1
+			
 			#-------------------------------------------------------finds latitude
 
 			# finds the latitude index
@@ -199,7 +226,26 @@ while (quitLoop == 0):
 			latitudeString += ","
 	
 			coordinatesString += latitudeString
+				
+			# -----------------------------------------------------find location name
+			
+			# find location name index
+			locationNameIndex = pageInfo.find("name", counter)
+			locationNameIndex = locationNameIndex + 8
+			
+			locationNameString = "'"
+			
+			while(pageInfo[locationNameIndex] != '"'):
+				locationNameString += pageInfo[locationNameIndex]
+				locationNameIndex = locationNameIndex + 1	
 	
+			locationNameString += "',"
+	
+			coordinatesString += locationNameString
+	
+	
+			print locationNameString
+			print ('\n')			
 	
 			#-------------------------------------------------------finds longitude
 
@@ -286,27 +332,51 @@ contents = '''
   <script type="text/javascript">
   
     var locations = 
-    var map = new google.maps.Map(document.getElementById('map'), {
+    
+    var map = new google.maps.Map(document.getElementById('map'), 
+    {
       zoom: 4,
       center: new google.maps.LatLng(38.94,-95.977),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
+    
     var infowindow = new google.maps.InfoWindow();
+    
     var marker, i;
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][0], locations[i][1]),
-        map: map
+    
+    for (i = 0; i < locations.length; i++) 
+    {  
+      marker = new google.maps.Marker(
+      {
+        position: new google.maps.LatLng(locations[i][0], locations[i][2]),
+        map: map,
+        animation: google.maps.Animation.DROP
       });
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-      marker.setIcon('iconImage.png');
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
+    
+      google.maps.event.addListener(marker, 'click', (function(marker, i) 
+      {
+      	marker.setIcon('iconImage.png');
+        	return function() 
+        	{
+        		infowindow.setContent(locations[i][1]);
+          		infowindow.open(map, marker);
+        	}
+    
       })(marker, i));
     
     }
+    
+    function toggleBounce() 
+    {
+  		if (marker.getAnimation() !== null) 
+  		{
+    		marker.setAnimation(null);
+  		} 
+  		else 
+  		{
+    		marker.setAnimation(google.maps.Animation.BOUNCE);
+  		}
+	}
     
   </script>
 </body>
