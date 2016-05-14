@@ -11,6 +11,6 @@ The map will open up in a local web browser using google maps to plot locations,
 - [x]Once metadata is received, pull the longitude and latitude from each picture.
 - [x]Pull the longitude and latitude from all the pictures.
 	- [x]Save the longitude and latitude in an array.
-- [x](Google maps api)
+- []Google maps api
 	- [x]Send the longitude and latitudes gathered in the array to the map to plot the locations and display them.
 	- [x]use java within an html string to then convert into a file and use it to open up the map in a web browser. 
