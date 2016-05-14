@@ -4,17 +4,76 @@ import urllib
 import webbrowser, os.path
 
 # gui library
-import easygui
+from Tkinter import *
+from PIL import Image, ImageTk
+
 
 #----------------------------------------------------------GUI-------------------------------------------------------------------
+global userName
 
-# path to open the image for the gui
-# (changes from computer to computer)
-photo = "/home/diegomedina/SchoolWork/CSUMB - Multimedia/instagramAPI/InstaPlot/titleImage.gif"
+#Creating a window for the menu
+root = Tk()
+root.title("Instagram Mapping")
+root.geometry("800x600")
+root.configure(background = 'white')
+
+class App:
+    def __init__(self, master):
+            bottomFrame = Frame(master)
+            bottomFrame.pack(side=BOTTOM)
+
+            self.quitButton = Button(bottomFrame, text="Quit", command=close_window, height=2, width=10)
+            self.quitButton.pack(side=BOTTOM)
+
+            self.searchButton = Button(bottomFrame, text="Search", command= self.userName, height=2, width=10)
+            self.searchButton.pack(side=BOTTOM)
+
+            imageTitle = Image.open("/home/diegomedina/SchoolWork/CSUMB - Multimedia/instagramAPI/InstaPlot/titleImage.gif")
+            photo = ImageTk.PhotoImage(imageTitle)
+            self.Title = Label(image=photo)
+            self.Title.image = photo
+            self.Title.pack()
+
+    def userName(self):
+            inputUser = Search()
+            print type(userName)
+            
+
+class Search:
+    def __init__(self):
+        self.root = Toplevel()
+        self.root.wm_title("Instagram ID")
+        self.root.geometry('400x200')
+        self.label = Label (self.root, text= "Please Enter Your Instagram Dispaly Name", font=("Comic Sans Ms",11))
+        self.label.pack()
+
+        self.entrytext = StringVar()
+        Entry(self.root, textvariable=self.entrytext, width=40).pack()
+
+        self.buttontext = StringVar()
+        self.buttontext.set("Enter")
+        Button(self.root, textvariable=self.buttontext, command=self.clicked1).pack()
+        
+        self.quitButton = Button(self.root, text="Close", command=close_window)
+        self.quitButton.pack(side=BOTTOM)
+
+        self.root.mainloop()
+      
+    #Getting the user Instagram name
+    def clicked1(self):
+        global userName
+        input1 = self.entrytext.get()
+        
+        userName = input1
+        return userName
+        
+
+def close_window():
+    root.destroy()
 
 
-# holds the userName entered by the user in the gui
-userName = easygui.enterbox( msg='Enter instagram user display name',image = photo, title='InstaPlot', default='', strip=True)
+mainWindow = App(root)
+root.mainloop()
 
 
 #--------------------------------------retrieve user information (user id number)-------------------------------------------------
