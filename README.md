@@ -9,7 +9,7 @@ Contributors:
 
 
 ###Description
-This python program will scan through an Instagram user's profile and pin point the location of the picture on Google maps. (If location is provided in the picture). The gui used is from the TKinter (python library), and all is ran through the terminal. A string containing java and html contains all the information to create a web page. The string is the converted to an html file and opened with webbrower (python library). Once the web browser is opened locally, you have reached the end of the program. The web page is left opened for the user to be able to browse through the map and zoom in and out as much they wish for.
+This python program will scan through an Instagram user's profile and pin point the location of the picture on Google maps. (If location is provided in the picture). The gui used is from the TKinter (python library), and all is ran through the terminal. A string containing java and html contains all the information to create a web page. The string is the converted to an html file and opened with web browser (python library). Once the web browser is opened locally, you have reached the end of the program. The web page is left opened for the user to be able to browse through the map and zoom in and out as much they wish for.
 
 
 ### Procedure followed:
